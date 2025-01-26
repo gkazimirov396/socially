@@ -29,10 +29,12 @@ model User {
 
   notifications        Notification[] @relation("userNotifications")
   notificationsCreated Notification[] @relation("notificationCreator")
+
+  @@map("users")
 }
 
 
-model Post{
+model Post {
   id            String    @id @default(uuid())
   authorId      String
   content       String?
@@ -44,10 +46,12 @@ model Post{
   comments      Comment[]
   likes         Like[]
   notifications Notification[]
+
+  @@map("posts")
 }
 
 
-model Comment{
+model Comment {
   id            String   @id @default(uuid())
   content       String
   authorId      String
@@ -59,6 +63,7 @@ model Comment{
   notifications Notification[]  
 
   @@index([authorId, postId])
+  @@map("comments")
 }
 
 model Like {
@@ -72,9 +77,10 @@ model Like {
 
   @@index([userId, postId])
   @@unique([userId, postId]) // this prevents same user liking post twice
+  @@map("likes")
 }
 
-model Follows{
+model Follows {
   followerId  String
   followingId String
   createdAt   DateTime @default(now())
@@ -84,6 +90,7 @@ model Follows{
 
   @@index([followerId, followingId]) 
   @@id([followerId, followingId]) // composite primary key prevents duplicate follows
+  @@map("follows")
 }
 
 model Notification {
@@ -102,6 +109,7 @@ model Notification {
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+  @@map("notifications")
 }
 
 enum NotificationType {

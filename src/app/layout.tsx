@@ -2,9 +2,14 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import type { PropsWithChildren } from 'react';
+import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from 'react-hot-toast';
+import { dark } from '@clerk/themes';
 
 import { ThemeProvider } from '@/context/ThemeProvider';
+
+import Navbar from '@/components/layout/Navbar';
+import Sidebar from '@/components/layout/Sidebar';
 
 import './globals.css';
 
@@ -29,33 +34,30 @@ export default function RootLayout({
   children,
 }: Readonly<Required<PropsWithChildren>>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+    <ClerkProvider appearance={{ baseTheme: dark }}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <div className="min-h-screen">
-            {/* <Navbar /> */}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <main className="min-h-screen">
+              <Navbar />
 
-            <main className="py-8">
-              <div className="max-w-7xl mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                  <div className="hidden lg:block lg:col-span-3">
-                    {/* <Sidebar /> */}
+              <div className="py-8">
+                <div className="max-w-7xl mx-auto px-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div className="hidden lg:block lg:col-span-3">
+                      <Sidebar />
+                    </div>
+                    <div className="lg:col-span-9">{children}</div>
                   </div>
-                  <div className="lg:col-span-9">{children}</div>
                 </div>
               </div>
             </main>
-          </div>
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
