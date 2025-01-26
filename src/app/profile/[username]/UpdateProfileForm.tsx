@@ -174,6 +174,9 @@ export default function UpdateProfileForm({
               <Button
                 type="submit"
                 onClick={form.handleSubmit(handleEditSubmit)}
+                disabled={
+                  !form.formState.isDirty || form.formState.isSubmitting
+                }
               >
                 Save Changes
               </Button>
@@ -184,69 +187,3 @@ export default function UpdateProfileForm({
     </Dialog>
   );
 }
-//return (
-//   <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-//     <form onSubmit={form.handleSubmit(handleEditSubmit)}>
-//       <DialogContent className="sm:max-w-[500px]">
-//         <DialogHeader>
-//           <DialogTitle>Edit Profile</DialogTitle>
-//         </DialogHeader>
-
-//         <div className="space-y-4 py-4">
-//           <div className="space-y-2">
-//             <Label>Name</Label>
-//             <Input
-//               name="name"
-//               value={editForm.name}
-//               onChange={e =>
-//                 setEditForm({ ...editForm, name: e.target.value })
-//               }
-//               placeholder="Your name"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <Label>Bio</Label>
-//             <Textarea
-//               name="bio"
-//               value={editForm.bio}
-//               onChange={e =>
-//                 setEditForm({ ...editForm, bio: e.target.value })
-//               }
-//               className="min-h-[100px]"
-//               placeholder="Tell us about yourself"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <Label>Location</Label>
-//             <Input
-//               name="location"
-//               value={editForm.location}
-//               onChange={e =>
-//                 setEditForm({ ...editForm, location: e.target.value })
-//               }
-//               placeholder="Where are you based?"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <Label>Website</Label>
-//             <Input
-//               name="website"
-//               value={editForm.website}
-//               onChange={e =>
-//                 setEditForm({ ...editForm, website: e.target.value })
-//               }
-//               placeholder="Your personal website"
-//             />
-//           </div>
-//         </div>
-
-//         <div className="flex justify-end gap-3">
-//           <DialogClose asChild>
-//             <Button variant="outline">Cancel</Button>
-//           </DialogClose>
-//           <Button type="submit">Save Changes</Button>
-//         </div>
-//       </DialogContent>
-//     </form>
-//   </Dialog>
-// );
