@@ -37,4 +37,4 @@ pnpm dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Or you can follow this [link](https://socially-opal-five.vercel.app/) and check it out.
+Or you can follow this [link](https://socially-dev.vercel.app) and check it out.
