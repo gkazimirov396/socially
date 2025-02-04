@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useOptimistic, useState } from 'react';
 import { HeartIcon, MessageCircleIcon } from 'lucide-react';
 import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
@@ -25,14 +25,19 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post, dbUserId }: PostCardProps) {
-  const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes);
-  const [hasLiked, setHasLiked] = useState(
-    post.likes.some(like => like.userId === dbUserId)
+  const [optimisticLikes, incrementLikes] = useOptimistic(
+    post._count.likes,
+    (prevLikes, amount: number) => {
+      return prevLikes + amount;
+    }
   );
 
   const [showComments, setShowComments] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [hasLiked, setHasLiked] = useState(
+    post.likes.some(like => like.userId === dbUserId)
+  );
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -40,11 +45,11 @@ export default function PostCard({ post, dbUserId }: PostCardProps) {
     try {
       setIsLiking(true);
       setHasLiked(prev => !prev);
-      setOptmisticLikes(prev => prev + (hasLiked ? -1 : 1));
+
+      incrementLikes(hasLiked ? -1 : 1);
 
       await toggleLike(post.id);
     } catch {
-      setOptmisticLikes(post._count.likes);
       setHasLiked(post.likes.some(like => like.userId === dbUserId));
     } finally {
       setIsLiking(false);
